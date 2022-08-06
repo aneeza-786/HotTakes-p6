@@ -4,6 +4,7 @@ const Sauce = require("./models/Sauce");
 const app = express();
 const saucesRoutes = require("./routes/sauce");
 const userRoutes = require('./routes/user');
+const path = require("path");
 
 mongoose.connect('mongodb+srv://aneeza:Masi78696@cluster0.ck1ckxb.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json());
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use("/api/auth", userRoutes);
 app.use("/api/sauces", saucesRoutes);
 
