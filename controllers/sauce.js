@@ -39,6 +39,10 @@ exports.getOneSauce = (req, res, next) => {
 // MODIFY SAUCE
 exports.modifySauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+    if(req.auth.userId !== sauce.userId){
+      console.log("Utilisateur non autorisé");
+      return res.status(403).json({message:"Utilisateur non autorisé"});
+    }
     const filename = sauce.imageUrl.split("/images/")[1];
     fs.unlink(`images/${filename}`, () => {
       const sauceObject = req.file
@@ -63,6 +67,10 @@ exports.modifySauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
+      if(req.auth.userId !== sauce.userId){
+      console.log("Utilisateur non autorisé");
+      return res.status(403).json({message:"Utilisateur non autorisé"});
+    }
       const filename = sauce.imageUrl.split("/images/")[1];
       fs.unlink(`images/${filename}`, () => {
         Sauce.deleteOne({ _id: req.params.id })
